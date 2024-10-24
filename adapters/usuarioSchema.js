@@ -6,20 +6,20 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
-},
-email: {
+  },
+  email: {
     type: String,
     required: true,
     unique: true,
     lowercase: true,
     trim: true,
-},
-contrasena_hash: {
+  },
+  contrasena_hash: {
     type: String,
     required: true,
-}
-}, { timestamps: true });
+  }
+}, {
+  timestamps: { createdAt: 'fecha_y_hora_de_inicio_de_sesion', updatedAt: 'updatedAt' } // Renombrar createdAt
+});
 
-module.exports = mongoose.model('User', userSchema,'usuarios');
-
-
+module.exports = mongoose.model('User', userSchema, 'usuarios');
