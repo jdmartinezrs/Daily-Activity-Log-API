@@ -1,9 +1,7 @@
-const { MongoClient } = require("mongodb");
+const mongoose = require("mongoose");
 
 class ConnectToDatabase {
   static instanceConnect;
-  db;
-  connection;
   user;
   #password;
 
@@ -17,28 +15,24 @@ class ConnectToDatabase {
   }
 
   async connectOpen() {
-    if (this.connection && this.connection.isConnected()) {
-      return; // Already connected
+    if (mongoose.connection.readyState === 1) {
+      return; // Ya está conectado
     }
 
-    this.connection = new MongoClient(
-      `mongodb://${this.user}:${encodeURIComponent(this.getPassword)}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB_NAME}`
-    );
+    const uri = `mongodb://${this.user}:${encodeURIComponent(this.getPassword)}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB_NAME}`;
 
     try {
-      await this.connection.connect();
-      this.db = this.connection.db(process.env.MONGO_DB_NAME);
+      await mongoose.connect(uri, {
+      });
+      console.log("Conexión a MongoDB exitosa");
     } catch (error) {
-      this.connection = undefined;
-      console.error('Error connecting to MongoDB:', error);
-      throw new Error('Error connecting to MongoDB');
+      console.error("Error al conectar a MongoDB:", error);
+      throw new Error("Error al conectar a MongoDB");
     }
   }
 
   async connectClose() {
-    if (this.connection) {
-      await this.connection.close();
-    }
+    await mongoose.connection.close();
   }
 
   get getPassword() {

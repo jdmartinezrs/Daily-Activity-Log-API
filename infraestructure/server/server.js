@@ -4,7 +4,7 @@ const { limiTotal } = require('../middlewares/rateLimit');
 const { jsonParseErrorHandler } = require('../middlewares/errorHandling');
 const path = require('path');
 const cookieParser = require('cookie-parser')
-
+const userRoutes = require('../../application/routes/usuarioRoutes');
 
 const createServer = () => {
     const app = express();
@@ -24,9 +24,9 @@ const createServer = () => {
     //         httpOnly: true, 
     //     }
     // }));
-
+ app.use('/user', userRoutes);
 
     return app; 
-}
+};
 
 module.exports = createServer;
