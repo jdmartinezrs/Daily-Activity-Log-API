@@ -5,6 +5,12 @@ class UserService{
         this.userRepository = new UserRepository();
     }
 
+    
+    async postNewUserService(data) {
+        return await this.userRepository.postNewUserRepository(data)
+    }
+
+
     async getAllUsersService(){
         const user = await this.userRepository.getAllUsersRepository()
         if(!user){
