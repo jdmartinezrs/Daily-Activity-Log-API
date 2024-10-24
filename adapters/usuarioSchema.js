@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   }
 }, {
-  timestamps: { createdAt: 'fecha_y_hora_de_inicio_de_sesion', updatedAt: 'updatedAt' } // Renombrar createdAt
+  timestamps: { createdAt: 'fecha_y_hora_de_inicio_de_sesion', updatedAt: 'updatedAt' } 
 });
 
 module.exports = mongoose.model('User', userSchema, 'usuarios');

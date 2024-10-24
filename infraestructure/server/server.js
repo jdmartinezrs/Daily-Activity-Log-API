@@ -2,15 +2,15 @@ const express = require('express');
 const session = require('express-session');
 const { limiTotal } = require('../middlewares/rateLimit');
 const { jsonParseErrorHandler } = require('../middlewares/errorHandling');
-const path = require('path');
-const cookieParser = require('cookie-parser')
+// const path = require('path');
+// const cookieParser = require('cookie-parser')
 const userRoutes = require('../../application/routes/usuarioRoutes');
 
 const createServer = () => {
     const app = express();
 
     app.use(express.json());
-    app.use(cookieParser());
+    // app.use(cookieParser());
     app.use(jsonParseErrorHandler);
     app.use(limiTotal);
 
