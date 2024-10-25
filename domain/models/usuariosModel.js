@@ -13,6 +13,15 @@ class User{
         return await user.aggregate([body]);
             }
 
+            async updateLoginTimestamp(userId) {
+                return await user.findByIdAndUpdate(
+                    userId,
+                    { fecha_y_hora_de_inicio_de_sesion: new Date() },
+                    { new: true }
+                );
+            }
+        
+
     async getAllUsersModel(){
         return await user.find({}).exec();
     }

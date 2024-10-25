@@ -30,8 +30,8 @@ class UserController {
             const errors = validationResult(req);
             if (!errors.isEmpty()) 
                  return res.status(400).json({ errors: errors.array() });
-            const user = await this.userService.getUserByNameAndPasswordService(req.body)
-            res.status(201).json(user);
+            const loginData = await this.userService.getUserByNameAndPasswordService(req.body)
+            res.status(201).json(loginData);
         }  catch (error) {
             const errorObj = error.message ? JSON.parse(error.message) : { status: 500, message: "Internal Server Error" };
             res.status(errorObj.status).json({ message: errorObj.message });

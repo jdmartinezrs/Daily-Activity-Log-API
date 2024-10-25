@@ -12,29 +12,41 @@ class UserRepository {
         }
     }
 
-
-    async getUserByNombre_user(body){
-        try{
+    async getUserByNombre_user(body) {
+        try {
             const user = new User();
-            let{nombre_usuario}= body;
+            let { nombre_usuario } = body;
             let query = {
-                $match:{
+                $match: {
                     nombre_usuario
                 }
             }
             return await user.logginUserModel(query);
-        }catch (error){
+        } catch (error) {
             throw new Error(JSON.stringify({status: 400, message: 'Error logging the user'}))
         }
     }
 
-    async getUserByContrasena_hash(contrasena_hash, user){
-       let {contrasena_hash:pass} = user
-        const isMatch = await bcrypt.compare(contrasena_hash, user.contrasena_hash)
-        if(!isMatch) throw new Error(JSON.stringify({status: 401, message: 'No Authorized'}))
-        const token = jwt.sign({user}, process.env.JWT_SECRET,{expiresIn: '15m'}) 
-        return token;
+    async getUserByContrasena_hash(contrasena_hash, user) {
+        const isMatch = await bcrypt.compare(contrasena_hash, user.contrasena_hash);
+        if (!isMatch) throw new Error(JSON.stringify({status: 401, message: 'No Authorized'}));
+        
+        // Actualizar timestamp y obtener el usuario actualizado
+        const userModel = new User();
+        const updatedUser = await userModel.updateLoginTimestamp(user._id);
+        
+        const token = jwt.sign({user}, process.env.JWT_SECRET, {expiresIn: '15m'});
+        
+        // Retornar objeto con token y timestamps
+        return {
+            token,
+            timestamps: {
+                fecha_y_hora_de_inicio_de_sesion: updatedUser.fecha_y_hora_de_inicio_de_sesion,
+                updatedAt: updatedUser.updatedAt
+            }
+        };
     }
+
 
 
     async getAllUsersRepository() {
