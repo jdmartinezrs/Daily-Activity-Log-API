@@ -20,6 +20,12 @@ class UserService{
         return loginData;
     }
 
+    async validateSessionService(token) {
+        const sessionInfo = await this.userRepository.validateSession(token);
+        return sessionInfo;
+    }
+
+
 
     async getAllUsersService(){
         const user = await this.userRepository.getAllUsersRepository()

@@ -35,13 +35,16 @@ class UserValidator {
         ]
     }
 
-
-
-
-
-
-
-
+    validarSesionValidator = () => {
+        return [
+            query().custom((value, { req }) => {
+                if (Object.keys(req.query).length > 0) {
+                    throw new Error('No envíes parámetros en la URL');
+                }
+                return true;
+            })
+        ]
+    }
 
 
 

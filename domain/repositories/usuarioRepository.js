@@ -52,6 +52,36 @@ class UserRepository {
         }
     }
 
+    async validateSession(token) {
+        try {
+            if (!token) {
+                throw new Error(JSON.stringify({ status: 401, message: 'No token provided' }));
+            }
+
+            // Remover el "Bearer " del token
+            const tokenWithoutBearer = token.replace('Bearer ', '');
+
+            // Verificar y decodificar el token
+            const decoded = jwt.verify(tokenWithoutBearer, process.env.JWT_SECRET);
+            
+            return {
+                user: decoded.user,
+                token_info: {
+                    issued_at: new Date(decoded.iat * 1000).toISOString(),
+                    expires_at: new Date(decoded.exp * 1000).toISOString(),
+                    is_expired: Date.now() >= decoded.exp * 1000
+                }
+            };
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                throw new Error(JSON.stringify({ status: 401, message: 'Token expired' }));
+            }
+            if (error.name === 'JsonWebTokenError') {
+                throw new Error(JSON.stringify({ status: 401, message: 'Invalid token' }));
+            }
+            throw error;
+        }
+    }
 
 
     async getAllUsersRepository() {
