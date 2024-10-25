@@ -5,21 +5,26 @@ const ObjectId = mongoose.Types.ObjectId;
 class User{
 
     async postNewUserModel(userData) {
-        const newUser = new user(userData); // Creas un nuevo usuario con los datos que recibes
-        return await newUser.save(); // Guardas el usuario en la base de datos
+        const newUser = new user(userData); 
+        return await newUser.save(); 
     }
 
-    async logginUserModel(body) { 
-        return await user.aggregate([body]);
-            }
+    async logginUserModel(nombre_usuario) { 
+        return await user.findOne({ nombre_usuario });
+    }
 
-            async updateLoginTimestamp(userId) {
-                return await user.findByIdAndUpdate(
-                    userId,
-                    { fecha_y_hora_de_inicio_de_sesion: new Date() },
-                    { new: true }
-                );
+    async updateLoginTimestamp(userId) {
+        return await user.findByIdAndUpdate(
+            userId,
+            { 
+                fecha_y_hora_de_inicio_de_sesion: new Date(),
+                $currentDate: { updatedAt: true }
+            },
+            { 
+                new: true
             }
+        );
+    }
         
 
     async getAllUsersModel(){

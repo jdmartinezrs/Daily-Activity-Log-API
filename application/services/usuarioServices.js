@@ -11,7 +11,7 @@ class UserService{
     }
 
     async getUserByNameAndPasswordService(body) {
-        const [user] = await this.userRepository.getUserByNombre_user(body);
+        const user = await this.userRepository.getUserByNombre_user(body);
         if (!user) throw new Error(JSON.stringify({status: 404, message: 'User not found'}));
         
         const loginData = await this.userRepository.getUserByContrasena_hash(body.contrasena_hash, user);

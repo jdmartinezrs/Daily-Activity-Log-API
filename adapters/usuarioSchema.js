@@ -17,9 +17,13 @@ const userSchema = new mongoose.Schema({
   contrasena_hash: {
     type: String,
     required: true,
+  },
+  fecha_y_hora_de_inicio_de_sesion: {
+    type: Date,
+    default: Date.now
   }
 }, {
-  timestamps: { createdAt: 'fecha_y_hora_de_inicio_de_sesion', updatedAt: 'updatedAt' } 
+  timestamps: { createdAt: false, updatedAt: 'updatedAt' } 
 });
 
 module.exports = mongoose.model('User', userSchema, 'usuarios');
